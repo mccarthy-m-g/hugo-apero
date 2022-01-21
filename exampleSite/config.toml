@@ -26,6 +26,8 @@ enableEmoji = true
   [markup.highlight]
     # one of: https://xyproto.github.io/splash/docs/ 
     style = "github"
+    # set to false to use a custom highlight theme instead
+    noClasses = true
     
 [params]
   orgName = "RStudio"
@@ -56,6 +58,15 @@ enableEmoji = true
   # add the filename name here, without extension
   # to use hex colors instead of named tachyons colors, include "hex" in filename
   custom_theme = "" 
+  
+  # use a built-in highlight theme
+  # one of: arrow / lcars
+  highlight_theme = ""
+  
+  # or, leave empty & make your own palette with hex colors
+  # the custom scss file must be in the assets/ folder
+  # add the filename name here, without extension
+  custom_highlight_theme = ""
   
   # use an embedded font-family
   # serif options: Fraunces / EB Garamond / Bitter

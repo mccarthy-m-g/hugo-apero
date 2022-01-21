@@ -523,6 +523,38 @@ html, body {
   scroll-padding-top: 73px;
 }
 
+// custom highlight themes
+// one of: arrow / lcars
+// precedence: Params.theme > .Params.custom_colors 
+// custom colors may either be named tachyons color or hex codes
+{{ $highlight_themes := (slice "arrow" "lcars") }}
+{{ if site.Params.highlight_theme }}
+  {{ if in $highlight_themes site.Params.highlight_theme }}
+    @import '{{ printf "highlight/%s" site.Params.highlight_theme }}';
+    @import 'highlight/set-highlight-theme';
+  {{ else }}
+    {{ errorf "Selected highlight theme '%s' is not one of the options." site.Params.highlight_theme }}
+  {{ end }}
+{{ else if site.Params.custom_highlight_theme }}
+  {{ $custom_file := (printf "%s/%s" "assets" site.Params.custom_highlight_theme ) }}
+  // TODO: decide whether to give both options
+  // detect if hex in user-provided filename
+  {{ $hex_colors := in site.Params.custom_highlight_theme "hex" }}
+  // detect if user-provided filename exists in assets
+  {{ if (fileExists (printf "%s.%s" $custom_file "scss")) -}}
+    {{ if not $hex_colors }}
+      // named colors can just be used
+      @import '{{ site.Params.custom_highlight_theme }}';
+    {{ else }}
+      // hex colors need set-highlight-theme too
+      @import '{{ site.Params.custom_highlight_theme }}';
+      @import 'highlight/set-highlight-theme';
+    {{ end }}
+  {{ else }}
+    {{ errorf "Could not find custom highlight theme named '%s' in assets/ folder." site.Params.custom_highlight_theme }}
+  {{ end }}
+{{ end }}
+
 // Fontawesome icons
 $fa-font-path: '{{ "webfonts" | relURL }}';
 @import "fontawesome-free-5.15.1-web/scss/fontawesome.scss";
